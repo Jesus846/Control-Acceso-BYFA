@@ -2,14 +2,16 @@ import tkinter as tk
 from tkinter import messagebox
 import mysql.connector
 import Dashboard  # Importa tu archivo Dashboard.py
-import Registro   # Importa tu archivo Registro.py
+import Registro    # Importa tu archivo Registro.py  # Importa el panel de administración
+import PanelSeguridad  # Importa el panel de seguridad
+import RHPanel     # Importa el panel de RH
 
 # Conexión a la base de datos MySQL
 conn = mysql.connector.connect(
     host="localhost",  # Cambia por la IP del servidor o 'localhost' si es local
     user="root",        # Usuario de MySQL
     password="",        # Contraseña de MySQL
-    database="proyecto_1"  # Nombre de la base de datos
+    database="BYFA_CONTROL"  # Nombre de la base de datos
 )
 cursor = conn.cursor()
 
@@ -32,14 +34,26 @@ def iniciar_sesion():
     
     if usuario and contrasena:
         # Verificar si el usuario existe y la contraseña es correcta
-        cursor.execute("SELECT * FROM usuarios WHERE Usuario = %s AND Contraseña = %s", (usuario, contrasena))
+        cursor.execute("SELECT * FROM usuarios WHERE Usuario = %s AND Contrasena = %s", (usuario, contrasena))
         resultado = cursor.fetchone()
         
         if resultado:
-            # Si la autenticación es correcta, redirigir a la página principal
+            # Extraer el cargo del usuario
+            cargo = resultado[4]  # Asumiendo que el cargo está en la tercera columna
+
+            # Si la autenticación es correcta, redirigir a la página principal según el cargo
             messagebox.showinfo("Éxito", f"Bienvenido, {usuario}!")
             root.destroy()  # Cierra la ventana actual de inicio de sesión
-            Dashboard.main()  # Llama a la función main() de Dashboard.py
+            
+            # Redirigir según el cargo
+            if cargo == "Admin":
+                Dashboard.main()  # Llama a la función main() de Dashboard.py
+            elif cargo == "Seguridad":
+                PanelSeguridad.main()  # Llama a la función main() de SeguridadPanel.py
+            elif cargo == "Recursos Humanos":
+                RHPanel.main()  # Llama a la función main() de RHPanel.py
+            else:
+                messagebox.showwarning("Error", "Cargo no reconocido.")
         else:
             messagebox.showwarning("Error", "Usuario o contraseña incorrectos. Inténtalo de nuevo.")
     else:
@@ -82,4 +96,3 @@ root.mainloop()
 
 # Cerrar la conexión a la base de datos al cerrar el programa
 conn.close()
-

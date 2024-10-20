@@ -8,7 +8,7 @@ conn = mysql.connector.connect(
     host="localhost",  # Cambia por la IP del servidor o 'localhost' si es local
     user="root",        # Usuario de MySQL
     password="",        # Contraseña de MySQL
-    database="proyecto_1"  # Nombre de la base de datos
+    database="BYFA_CONTROL"  # Nombre de la base de datos
 )
 cursor = conn.cursor()
 
@@ -27,8 +27,8 @@ def centrar_ventana(ventana, ancho, alto):
 fecha_registro = datetime.now()
 
 # Función para registrar nuevos usuarios
-def registrar_usuario(entry_personal, entry_usuario, entry_contrasena, entry_acceso):
-    personal = entry_personal.get()
+def registrar_usuario(entry_nombre, entry_usuario, entry_contrasena, entry_acceso):
+    personal = entry_nombre.get()
     usuario = entry_usuario.get()
     contrasena = entry_contrasena.get()
     aceso = entry_acceso.get()
@@ -43,13 +43,13 @@ def registrar_usuario(entry_personal, entry_usuario, entry_contrasena, entry_acc
         else:
             # Insertar nuevo usuario en la base de datos
             cursor.execute(
-                "INSERT INTO usuarios (Nombre, Usuario, Contraseña, Nivel_Aceso, Fecha) VALUES (%s, %s, %s, %s, %s)",
+                "INSERT INTO usuarios (Nombre, Usuario, Contrasena, Cargo, Fecha) VALUES (%s, %s, %s, %s, %s)",
                 (personal, usuario, contrasena, aceso, fecha_registro)
             )
             conn.commit()
             messagebox.showinfo("Éxito", "Usuario registrado con éxito")
             # Limpiar los campos de entrada
-            entry_personal.delete(0, tk.END)
+            entry_nombre.delete(0, tk.END)
             entry_usuario.delete(0, tk.END)
             entry_contrasena.delete(0, tk.END)
             entry_acceso.delete(0, tk.END)
@@ -63,6 +63,7 @@ def abrir_ventana_registro():
     ventana_registro.geometry("800x600")
     ventana_registro.configure(bg="#FFA500")  # Color de fondo rojo
     centrar_ventana(ventana_registro, 800,600)
+
     label_personal = tk.Label(ventana_registro, text="Nombre del personal:", font=("Arial", 14))
     label_personal.pack(pady=15)
     entry_personal = tk.Entry(ventana_registro, font=("Arial", 14), width=30)
@@ -81,7 +82,7 @@ def abrir_ventana_registro():
     entry_contrasena.pack(pady=10)
 
     # Etiqueta y campo de entrada para el nivel de acceso
-    label_acceso = tk.Label(ventana_registro, text="Nivel de acceso:", font=("Arial", 14))
+    label_acceso = tk.Label(ventana_registro, text="Cargo:", font=("Arial", 14))
     label_acceso.pack(pady=15)
     entry_acceso = tk.Entry(ventana_registro, font=("Arial", 14), width=30)
     entry_acceso.pack(pady=10)

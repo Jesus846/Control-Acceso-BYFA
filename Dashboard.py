@@ -9,7 +9,7 @@ def conectar_db():
             host="localhost",  # Cambia por la IP del servidor o 'localhost' si es local
             user="root",        # Usuario de MySQL
             password="",        # Contraseña de MySQL
-            database="proyecto_1"  # Nombre de la base de datos
+            database="BYFA_CONTROL"  # Nombre de la base de datos
         )
         cursor = conn.cursor()
         return conn, cursor
@@ -21,7 +21,7 @@ def conectar_db():
 # Función para cargar los usuarios en la tabla
 def cargar_usuarios(cursor, tree):
     try:
-        cursor.execute("SELECT Nombre ,Usuario, Nivel_Aceso ,Hora_entrada,Hora_Salida, Fecha FROM usuarios")
+        cursor.execute("SELECT Nombre ,Usuario,Contrasena, Cargo, Fecha FROM usuarios")
         usuarios = cursor.fetchall()
         
         # Limpiar la tabla antes de llenarla nuevamente
@@ -64,24 +64,22 @@ def main():
     frame_tabla.pack(pady=10, fill=tk.BOTH, expand=True)
 
     # Definir las columnas de la tabla
-    tree = ttk.Treeview(frame_tabla, columns=("Nombre", "Usuario", "Nivel de Acceso","Hora entrada", "Hora salida", "Fecha de Registro"), show="headings", height=8)
+    tree = ttk.Treeview(frame_tabla, columns=("Nombre", "Usuario", "Contraseña","Cargo", "Fecha de Registro"), show="headings", height=8)
     tree.pack(fill=tk.BOTH, expand=True)
 
     # Configurar los encabezados de la tabla
     tree.heading("Nombre", text="Nombre")
     tree.heading("Usuario", text="Usuario")
-    tree.heading("Nivel de Acceso",text="Nivel de Acceso")
-    tree.heading("Hora entrada", text="Hora entrada")
-    tree.heading("Hora salida",text="Hora salida")
+    tree.heading("Cargo",text="Cargo")
+    tree.heading("Contraseña", text="Contraseña")
     tree.heading("Fecha de Registro", text="Fecha de Registro")
     
 
     # Ajustar el ancho de las columnas
     tree.column("Nombre", anchor="center", width=250, stretch=tk.YES)
     tree.column("Usuario", anchor="center", width=250, stretch=tk.YES)
-    tree.column("Nivel de Acceso", anchor="center", width=200, stretch=tk.YES)
-    tree.column("Hora entrada", anchor="center", width=250, stretch=tk.YES)
-    tree.column("Hora salida", anchor="center", width=250, stretch=tk.YES)
+    tree.column("Contraseña", anchor="center", width=200, stretch=tk.YES)
+    tree.column("Cargo", anchor="center", width=250, stretch=tk.YES)
     tree.column("Fecha de Registro", anchor="center", width=200, stretch=tk.YES)
     tree.column("#0", anchor="center", width=200, stretch=tk.YES)
 
