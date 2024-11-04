@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import mysql.connector
 import Dashboard  
-import Registro     
+import Registro      
 import PanelSeguridad  
 import RHPanel     
 

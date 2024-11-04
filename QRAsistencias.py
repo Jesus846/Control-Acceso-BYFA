@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import qrcode
 from PIL import Image, ImageTk
+import os
 
 def generar_qr():
     nombre_personal = entry_nombre.get()
@@ -14,10 +15,16 @@ def generar_qr():
     
     contenido_qr = f"{nombre_personal},{area_personal},{sueldo_diario}"
     
-    qr_img = qrcode.make(contenido_qr)
-    qr_img.save("codigo_qr.png")
+ 
+    if not os.path.exists("QR_ASISTENCIA"):
+        os.makedirs("QR_ASISTENCIA")
     
-    img = Image.open("codigo_qr.png")
+ 
+    nombre_archivo = f"QR_ASISTENCIA/{nombre_personal}.png"
+    qr_img = qrcode.make(contenido_qr)
+    qr_img.save(nombre_archivo)
+
+    img = Image.open(nombre_archivo)
     img = img.resize((150, 150), Image.Resampling.LANCZOS)
     
     qr_tk = ImageTk.PhotoImage(img)
@@ -61,3 +68,7 @@ def abrir_ventana_qr(root):
     qr_label.grid(row=4, columnspan=2, pady=10)
 
     centrar_ventana(ventana_qr)
+
+
+if __name__ == "__main__":
+    print("Este archivo está configurado para ser importado")
